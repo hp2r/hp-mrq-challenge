@@ -1,7 +1,117 @@
 .symbolCard {
-  border: 2px solid black; /* just for visibility, feel free to remove it */
-  margin: 10px; /* just for visibility, feel free to remove it */
-  padding: 10px; /* just for visibility, feel free to remove it */
+  /*border: 2px solid black;
+  margin: 10px;
+  padding: 10px; */
+  margin: 10px;
+  background-color: white;
+  border-radius: 0.4rem;
+  position: relative;
+  cursor: pointer;
+}
+
+.symbolCard__green {
+  box-shadow: 0 0 20px 1px green !important;
+}
+
+.symbolCard__red {
+  box-shadow: 0 0 20px 1px red !important;
+}
+
+.symbolCard__scale {
+  animation-name: scale;
+  animation-duration: 0.8s;
+  animation-fill-mode: forwards;
+}
+
+.symbolCard__descale {
+  animation: descale;
+  animation-duration: 0.5s;
+  animation-direction: forwards;
+}
+
+.symbolCard__banner {
+  background-color: var(--colorDark);
+  border-radius: 0.4rem 0.4rem 0 0;
+  padding: 0.2rem;
+  color: white;
+  font-weight: bold;
+}
+
+.symbolCard__banner_trend {
+  width: 56px;
+  position: absolute;
+  top: -10%;
+  right: 0%;
+}
+
+.symbolCard__price {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.4rem 0rem 0.4rem;
+  :first-child {
+    align-self: end;
+    font-weight: 600;
+  }
+  :last-child {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+}
+.symbolCard__row {
+  display: flex;
+  padding: 0.4rem;
+
+  :first-child {
+    height: 30px;
+    width: 30px;
+    align-self: auto;
+  }
+  :last-child {
+    margin-left: auto;
+    text-align: end;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 50%;
+  }
+}
+
+@keyframes scale {
+  from {
+      transform: scale(1);
+  }
+  to {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px 1px black;
+  }
+}
+
+@keyframes descale {
+  from {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px 1px black;
+  }
+  to {
+      transform: scale(1);
+  }
+}
+
+@keyframes notActive {
+  from {
+      transform: scale(1);
+  }
+  to {
+      transform: scale(0.8);
+  }
+}
+
+@keyframes noneSelected {
+  from {
+      transform: scale(0.8);
+  }
+  to {
+      transform: scale(1);
+  }
 }
 
 .symbolCard__shake {
