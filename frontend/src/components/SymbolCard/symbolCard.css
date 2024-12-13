@@ -29,6 +29,14 @@
   animation-direction: forwards;
 }
 
+.symbolCard__selected {
+  transform: scale(1.02);
+}
+
+.symbolCard__unselected {
+  transform: scale(0.9);
+}
+
 .symbolCard__banner {
   background-color: var(--colorDark);
   border-radius: 0.4rem 0.4rem 0 0;
@@ -92,25 +100,7 @@
       box-shadow: 0 0 20px 1px black;
   }
   to {
-      transform: scale(1);
-  }
-}
-
-@keyframes notActive {
-  from {
-      transform: scale(1);
-  }
-  to {
-      transform: scale(0.8);
-  }
-}
-
-@keyframes noneSelected {
-  from {
-      transform: scale(0.8);
-  }
-  to {
-      transform: scale(1);
+      transform: scale(0.9);
   }
 }
 

@@ -1,0 +1,5 @@
+.symbolsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(max(227px, 100%/4), 1fr));
+    grid-template-rows: auto;
+}
