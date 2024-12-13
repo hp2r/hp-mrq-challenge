@@ -7,7 +7,7 @@ import downIcon from '@/assets/down.png';
 import { useAppSelector } from '@/hooks/redux';
 import ListItem from '@/components/ListItem';
 import SymbolCardRow from './symbolCardRow';
-import { useEffect, useMemo, useState } from 'react';
+import { act, useEffect, useMemo, useRef, useState } from 'react';
 import percentageDiff from '@/utils/percentageDiff';
 
 type SymbolCardProps = {
@@ -30,20 +30,42 @@ const SymbolCard = ({ id, onClick, price }: SymbolCardProps) => {
   };
 
   useEffect(() => {
+    return () => {
+      console.log('Component unmounted'); 
+    };
+  },[]);
+
+  useEffect(() => {
+    const classes = ['symbolCard'];
+
+    if(timerId) clearTimeout(timerId);
+
     if(activeSymbol === id) {
-      setCardClassName('symbolCard symbolCard__scale');
-      if(timerId) clearTimeout(timerId);
-    } else {
-      setCardClassName('symbolCard symbolCard__descale');
-      if(price > currentPrice) {
-        setCardClassName(`symbolCard symbolCard__green ${addShake}`)
-      } else {
-        setCardClassName(`symbolCard symbolCard__red ${addShake}`)
+      classes.push('symbolCard__selected');
+    } else if(activeSymbol !== id || activeSymbol === null) {
+      if(activeSymbol === null) {
+        classes.splice(classes.indexOf('symbolCard__unselected'), 1);
+        classes.push('symbolCard');
+      } else if(activeSymbol.length > 0 && activeSymbol !== id) {
+        classes.push('symbolCard__unselected');
       }
-      setTimerId(setTimeout(() => {
-          setCardClassName('symbolCard');
-      }, 2000))
+
+      if(currentPrice > 0 && price > currentPrice) {
+        classes.push(`symbolCard__green ${addShake}`);
+        setTimerId(setTimeout(() => {
+          classes.splice(classes.indexOf('symbolCard__green'), 1);
+          setCardClassName(classes.join(' '));
+        }, 1000));
+      } else if(currentPrice > 0 && price < currentPrice) {
+        classes.push(`symbolCard__red ${addShake}`);
+        setTimerId(setTimeout(() => {
+          classes.splice(classes.indexOf('symbolCard__red'), 1);
+          setCardClassName(classes.join(' '));
+        }, 1000));
+      }
     }
+
+    setCardClassName(classes.join(' '));
     setCurrentPrice(price);
   },[activeSymbol, price]);
 

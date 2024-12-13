@@ -10,26 +10,30 @@ type PriceChartProps = {
 
 const PriceChart = ({ symbolId }: PriceChartProps) => {
   const dispatch = useAppDispatch();
+  const { activeSymbol } = useAppSelector((state) => state.store);
+  const symbolActivated:string|null = activeSymbol || symbolId;
+
   useEffect(() => {
-    if (symbolId) {
-      dispatch(fetchPriceHistory(symbolId));
+    if (activeSymbol) {
+      dispatch(fetchPriceHistory(activeSymbol));
     }
-  }, [dispatch, symbolId]);
+  }, [dispatch, activeSymbol]);
 
   const apiState = useAppSelector(selectors.apiState);
   const data = useAppSelector(selectors.selectPriceHistory);
   const symbolInfo = useAppSelector(selectors.selectSymbolInfo);
 
-  if (apiState.loading && symbolId !== null)
+  if (apiState.loading && symbolActivated !== null)
     return (
       <div className="priceChart">
         <Loading />
       </div>
     );
   if (apiState.error) return <div className="priceChart">Failed to get price history!</div>;
-  if (!symbolId) return <div className="priceChart">Select stock</div>;
+  if (!symbolActivated) return <div className="priceChart">Select stock</div>;
   return (
     <div className="priceChart">
+      <h3>PRICE HISTORY</h3>
       <div>{symbolInfo}</div>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data.map((e) => ({ ...e, time: new Date(e.time).toLocaleTimeString() }))}>
@@ -40,6 +44,7 @@ const PriceChart = ({ symbolId }: PriceChartProps) => {
       </ResponsiveContainer>
     </div>
   );
+ 
 };
 
 export default PriceChart;
