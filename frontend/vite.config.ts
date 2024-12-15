@@ -11,7 +11,7 @@ export default defineConfig({
     watch: true,
     globals: true,
     environment: "jsdom",
-    setupFiles: ["@testing-library/jest-dom"],
+    setupFiles: ["@testing-library/jest-dom", "./setupFiles.ts"],
     exclude: ["node_modules/**","tests/**"],
   },
 });
