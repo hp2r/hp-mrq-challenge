@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import './listprice.css';
 type ListPriceProps = {
   price: string;
@@ -11,4 +12,4 @@ const ListPrice = ({ price }: ListPriceProps) => {
   );
 };
 
-export default ListPrice;
+export default memo(ListPrice);

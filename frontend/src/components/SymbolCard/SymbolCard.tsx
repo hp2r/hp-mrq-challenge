@@ -10,6 +10,8 @@ import ListPrice from '@/components/ListPrice';
 import ListBanner from '../ListBanner';
 import currencyFormatter from '@/utils/currencyFormatter';
 
+const PERCENTAGE_DIFF:number = 25;
+
 type SymbolCardProps = {
   id: string;
   onClick: (symbolId: string) => void;
@@ -23,12 +25,13 @@ const SymbolCard = ({ id, onClick, price }: SymbolCardProps) => {
   const [cardClassName, setCardClassName] = useState('symbolCard'); 
   const [currentPrice, setCurrentPrice] = useState(0);
   const [timerId, setTimerId] = useState<ReturnType<typeof setTimeout>>();
-  const addShake:string = (percentageDiff(price, currentPrice)) > 25 ? 'symbolCard__shake' : '';
+  const addShake:string = (percentageDiff(price, currentPrice)) > PERCENTAGE_DIFF ? 'symbolCard__shake' : '';
   
   const handleOnClick = () => {
     onClick(id);
   };
 
+  //TODO: Refactor this useEffect more
   useEffect(() => {
     const classes = ['symbolCard'];
 
@@ -44,21 +47,16 @@ const SymbolCard = ({ id, onClick, price }: SymbolCardProps) => {
         classes.push('symbolCard__unselected');
       }
 
-      if(currentPrice > 0 && price > currentPrice) {
-        classes.push(`symbolCard__green ${addShake}`);
+      if(currentPrice > 0 && price !== currentPrice) {
+        const glowColorClass = price > currentPrice ? `symbolCard__green` : `symbolCard__red`;
+        classes.push(`${glowColorClass} ${addShake}`);
+
         setTimerId(setTimeout(() => {
-          classes.splice(classes.indexOf('symbolCard__green'), 1);
-          setCardClassName(classes.join(' '));
-        }, 1000));
-      } else if(currentPrice > 0 && price < currentPrice) {
-        classes.push(`symbolCard__red ${addShake}`);
-        setTimerId(setTimeout(() => {
-          classes.splice(classes.indexOf('symbolCard__red'), 1);
+          classes.splice(classes.indexOf(glowColorClass), 1);
           setCardClassName(classes.join(' '));
         }, 1000));
       }
     }
-
     setCardClassName(classes.join(' '));
     setCurrentPrice(price);
   },[activeSymbol, price]);

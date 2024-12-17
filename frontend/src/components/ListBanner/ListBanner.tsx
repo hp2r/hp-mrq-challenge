@@ -1,6 +1,7 @@
 import './listbanner.css';
 import upIcon from '@/assets/up.png';
 import downIcon from '@/assets/down.png';
+import { memo } from 'react';
 
 type ListBannerProps = {
   id: string;
@@ -15,4 +16,4 @@ const ListBanner = ({ id, trend }: ListBannerProps) => {
   );
 };
 
-export default ListBanner;
+export default memo(ListBanner);
