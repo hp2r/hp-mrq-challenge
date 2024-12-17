@@ -2,13 +2,15 @@ import './symbolCard.css';
 import { ReactComponent as CompanyIcon } from '@/assets/company.svg';
 import { ReactComponent as IndustryLogo } from '@/assets/industry.svg';
 import { ReactComponent as MarketCapIcon } from '@/assets/market_cap.svg';
-import upIcon from '@/assets/up.png';
-import downIcon from '@/assets/down.png';
 import { useAppSelector } from '@/hooks/redux';
 import ListItem from '@/components/ListItem';
-import SymbolCardRow from './symbolCardRow';
-import { act, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import percentageDiff from '@/utils/percentageDiff';
+import ListPrice from '@/components/ListPrice';
+import ListBanner from '../ListBanner';
+import currencyFormatter from '@/utils/currencyFormatter';
+
+const PERCENTAGE_DIFF:number = 25;
 
 type SymbolCardProps = {
   id: string;
@@ -23,18 +25,13 @@ const SymbolCard = ({ id, onClick, price }: SymbolCardProps) => {
   const [cardClassName, setCardClassName] = useState('symbolCard'); 
   const [currentPrice, setCurrentPrice] = useState(0);
   const [timerId, setTimerId] = useState<ReturnType<typeof setTimeout>>();
-  const addShake:string = (percentageDiff(price, currentPrice)) > 25 ? 'symbolCard__shake' : '';
+  const addShake:string = (percentageDiff(price, currentPrice)) > PERCENTAGE_DIFF ? 'symbolCard__shake' : '';
   
   const handleOnClick = () => {
     onClick(id);
   };
 
-  useEffect(() => {
-    return () => {
-      console.log('Component unmounted'); 
-    };
-  },[]);
-
+  //TODO: Refactor this useEffect more
   useEffect(() => {
     const classes = ['symbolCard'];
 
@@ -50,40 +47,29 @@ const SymbolCard = ({ id, onClick, price }: SymbolCardProps) => {
         classes.push('symbolCard__unselected');
       }
 
-      if(currentPrice > 0 && price > currentPrice) {
-        classes.push(`symbolCard__green ${addShake}`);
+      if(currentPrice > 0 && price !== currentPrice) {
+        const glowColorClass = price > currentPrice ? `symbolCard__green` : `symbolCard__red`;
+        classes.push(`${glowColorClass} ${addShake}`);
+
         setTimerId(setTimeout(() => {
-          classes.splice(classes.indexOf('symbolCard__green'), 1);
-          setCardClassName(classes.join(' '));
-        }, 1000));
-      } else if(currentPrice > 0 && price < currentPrice) {
-        classes.push(`symbolCard__red ${addShake}`);
-        setTimerId(setTimeout(() => {
-          classes.splice(classes.indexOf('symbolCard__red'), 1);
+          classes.splice(classes.indexOf(glowColorClass), 1);
           setCardClassName(classes.join(' '));
         }, 1000));
       }
     }
-
     setCardClassName(classes.join(' '));
     setCurrentPrice(price);
   },[activeSymbol, price]);
 
   return (
     <div key={id} id={id} onClick={handleOnClick} className={cardClassName}>
-      <div className='symbolCard__banner'>
-        <div className='symbolCard__banner_id'>{id}</div>
-        {trend && <div className='symbolCard__banner_trend' data-testid={`${id}-trend-${trend}`}><img src={trend === 'UP' ? upIcon : downIcon} /></div>}
-      </div>
-      <div className='symbolCard__price'>
-        <div>PRICE:</div>
-        <div>{price ? '$'+Math.round(price) : '--'}</div>
-      </div>
+      <ListBanner id={id} trend={trend} />
+      <ListPrice price={currencyFormatter(price)} />
       {showCardInfo &&
         <>
-        <SymbolCardRow icon={<CompanyIcon />} field={companyName} /> 
-        <SymbolCardRow icon={<IndustryLogo />} field={industry} /> 
-        <SymbolCardRow icon={<MarketCapIcon />} field={"$"+Math.abs(Number(marketCap)) / 1.0e+9 + "B"} /> 
+        <ListItem Icon={<CompanyIcon />} label={companyName} spacing='space-between'/> 
+        <ListItem Icon={<IndustryLogo />} label={industry} spacing='space-between'/>
+        <ListItem Icon={<MarketCapIcon />} label={currencyFormatter(marketCap)} spacing='space-between'/>
         </>
       }
     </div>

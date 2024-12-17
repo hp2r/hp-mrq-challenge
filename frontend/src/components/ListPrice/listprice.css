@@ -1,0 +1,13 @@
+.listPrice {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 0.4rem 0rem 0.4rem;
+  :first-child {
+    align-self: end;
+    font-weight: 600;
+  }
+  :last-child {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+}

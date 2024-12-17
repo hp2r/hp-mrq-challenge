@@ -9,6 +9,15 @@
   cursor: pointer;
 }
 
+.symbolCard__border {
+  position: absolute; 
+  top: -5px; 
+  left: -5px; 
+  right: -5px; 
+  bottom: -5px; 
+  pointer-events: none;
+}
+
 .symbolCard__green {
   box-shadow: 0 0 20px 1px green !important;
 }
@@ -35,53 +44,6 @@
 
 .symbolCard__unselected {
   transform: scale(0.9);
-}
-
-.symbolCard__banner {
-  background-color: var(--colorDark);
-  border-radius: 0.4rem 0.4rem 0 0;
-  padding: 0.2rem;
-  color: white;
-  font-weight: bold;
-}
-
-.symbolCard__banner_trend {
-  width: 56px;
-  position: absolute;
-  top: -10%;
-  right: 0%;
-}
-
-.symbolCard__price {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 0.4rem 0rem 0.4rem;
-  :first-child {
-    align-self: end;
-    font-weight: 600;
-  }
-  :last-child {
-    font-size: 2rem;
-    font-weight: bold;
-  }
-}
-.symbolCard__row {
-  display: flex;
-  padding: 0.4rem;
-
-  :first-child {
-    height: 30px;
-    width: 30px;
-    align-self: auto;
-  }
-  :last-child {
-    margin-left: auto;
-    text-align: end;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 50%;
-  }
 }
 
 @keyframes scale {
